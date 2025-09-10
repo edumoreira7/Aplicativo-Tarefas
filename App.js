@@ -1,29 +1,34 @@
-import { Text, SafeAreaView, StyleSheet } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Home from './components/Home'
+import Adicionar from './components/Adicionar'
 
-// You can import supported modules from npm
-import { Card } from 'react-native-paper';
+const Abas = createBottomTabNavigator();
 
-export default function App() {
-  return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.paragraph}>
-        Aplicativo tarefas
-      </Text>
-    </SafeAreaView>
-  );
+
+class App extends React.Component {
+  render() {
+    return (
+      <NavigationContainer>
+        <Abas.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              let icone;
+              if (route.name === 'Home') icone = 'home';
+              else if (route.name === 'Adicionar') icone = 'plus-box';
+
+              return <MaterialCommunityIcons name={icone} color={color} size={size} />;
+            }
+          })}
+        >
+          <Abas.Screen name="Home" component={Home} />
+          <Abas.Screen name="Adicionar" component={Adicionar} />
+        </Abas.Navigator>
+      </NavigationContainer>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-  paragraph: {
-    margin: 24,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-});
+export default App;
