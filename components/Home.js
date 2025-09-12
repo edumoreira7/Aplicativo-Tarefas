@@ -29,7 +29,7 @@ class Home extends React.Component {
           <TouchableOpacity
             key={tarefa.id}
             style={estilos.item}
-            onPress={() => this.props.navigation.navigate('Detalhes', { tarefa })}
+            onPress={() => this.props.navigation.navigate('Editar', { tarefa })}
           >
             <Text style={estilos.texto}>
               {tarefa.nome} {tarefa.concluida ? '✅' : ''}
