@@ -11,7 +11,9 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    firebase.database().ref('tarefas').on('value', snapshot => {
+    const { uid } = this.props.route.params; // ✅ pega o usuário logado
+
+    firebase.database().ref(`tarefas/${uid}`).on('value', snapshot => {
       const data = snapshot.val();
       const tarefas = data
         ? Object.entries(data).map(([id, valor]) => ({ id, ...valor }))

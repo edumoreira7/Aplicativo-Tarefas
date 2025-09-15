@@ -10,12 +10,12 @@ class DetalhesTarefa extends Component {
   };
 
   carregarTarefa() {
-    const tarefa = this.props.route.params?.tarefa;
+    const { tarefa, uid } = this.props.route.params; // ✅ uid vem da navegação
 
     if (tarefa) {
       this.setState({ tarefa, id: tarefa.id, novoTitulo: tarefa.nome });
     } else {
-      firebase.database().ref('tarefas').once('value', snapshot => {
+      firebase.database().ref(`tarefas/${uid}`).once('value', snapshot => {
         const data = snapshot.val();
         if (data) {
           const primeira = Object.entries(data)[0];
@@ -40,52 +40,58 @@ class DetalhesTarefa extends Component {
 
   salvarAlteracoes() {
     const { id, tarefa, novoTitulo } = this.state;
+    const { uid } = this.props.route.params; // ✅
 
     if (id && tarefa) {
-      firebase.database().ref('tarefas').child(id).update({
+      firebase.database().ref(`tarefas/${uid}`).child(id).update({
         nome: novoTitulo,
         concluida: tarefa.concluida
       })
       .then(() => {
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('Home', { uid }); // mantém uid
       })
       .catch(error => {
-        Alert.alert("Erro", "Erro ao salvar alterações: " + error.message);
+        alert("Erro ao salvar alterações: " + error.message);
       });
     } else {
-      this.props.navigation.navigate('Home');
+      this.props.navigation.navigate('Home', { uid });
     }
   }
 
   alternarConcluida() {
     const { id, tarefa } = this.state;
+    const { uid } = this.props.route.params; // ✅
 
     if (id && tarefa) {
       const novoStatus = !tarefa.concluida;
-      firebase.database().ref('tarefas').child(id).update({
+      firebase.database().ref(`tarefas/${uid}`).child(id).update({
         concluida: novoStatus
       })
       .then(() => {
         this.setState({ tarefa: { ...tarefa, concluida: novoStatus } });
       })
       .catch(error => {
-        Alert.alert("Erro", "Erro ao atualizar status: " + error.message);
+        alert("Erro ao atualizar status: " + error.message);
       });
     }
   }
 
   removerTarefa() {
-    if (this.state.id) {
-      firebase.database().ref('tarefas').child(this.state.id).remove()
+    const { id } = this.state;
+    const { uid } = this.props.route.params; // ✅
+
+    if (id) {
+      firebase.database().ref(`tarefas/${uid}`).child(id).remove()
         .then(() => {
-          Alert.alert("Sucesso", "Tarefa removida!");
-          this.props.navigation.navigate('Home');
+          alert("Tarefa removida!");
+          this.props.navigation.navigate('Home', { uid }); // mantém uid
         })
         .catch(error => {
-          Alert.alert("Erro", "Erro ao remover: " + error.message);
+          alert("Erro ao remover: " + error.message);
         });
     }
   }
+
 
   render() {
     const { tarefa, novoTitulo } = this.state;
