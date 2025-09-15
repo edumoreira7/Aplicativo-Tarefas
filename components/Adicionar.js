@@ -13,14 +13,23 @@ class Adicionar extends React.Component {
 
   salvarTarefa() {
     const { novaTarefa } = this.state;
+    const { uid } = this.props.route.params; // pega UID do usuário logado
+
     if (novaTarefa.trim()) {
-      firebase.database().ref('/tarefas').push({
-        nome: novaTarefa, 
-        concluida: false   
-      });
-      alert("Tarefa salva!");
-      this.setState({ novaTarefa: '' });
-      this.props.navigation.navigate('Home');
+      firebase.database()
+        .ref(`tarefas/${uid}`) // salva na pasta do usuário logado
+        .push({
+          nome: novaTarefa,
+          concluida: false
+        })
+        .then(() => {
+          alert("Sucesso", "Tarefa salva!");
+          this.setState({ novaTarefa: '' });
+          this.props.navigation.navigate('Home', { uid });
+        })
+        .catch(error => {
+          alert("Erro" + error.message);
+        });
     }
   }
 

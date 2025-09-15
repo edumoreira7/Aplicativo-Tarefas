@@ -12,7 +12,9 @@ class Buscar extends React.Component {
   }
 
   buscarTarefa() {
-    firebase.database().ref('tarefas')
+    const { uid } = this.props.route.params; // ✅ pega o uid do usuário logado
+
+    firebase.database().ref(`tarefas/${uid}`)
       .orderByChild('nome')
       .equalTo(this.state.termo)
       .once('value', snapshot => {
@@ -26,6 +28,7 @@ class Buscar extends React.Component {
         }
       });
   }
+
 
   render() {
     return (
