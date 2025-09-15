@@ -43,7 +43,7 @@ class Home extends React.Component {
   render() {
     return (
       <View style={estilos.tela}>
-        <Text style={estilos.titulo}>Home</Text>
+        <Text style={estilos.titulo}>Tarefas</Text>
         <ScrollView>
         {this.state.lista.map(tarefa => (
           <TouchableOpacity

@@ -35,11 +35,12 @@ class Adicionar extends React.Component {
         .set({
           id: ref.key,
           nome: novaTarefa,
-          passos: passos
+          passos: passos,
+          concluida: false, 
         })
         .then(() => {
           alert("Tarefa salva!");
-          this.setState({ novaTarefa: '' });
+          this.setState({ novaTarefa: '', passos: []});
           this.props.navigation.navigate('Home', { uid });
         })
         .catch(error => {
