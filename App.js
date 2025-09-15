@@ -49,14 +49,16 @@ class Login extends React.Component {
   render() {
     return (
       <View style={{ padding: 20 }}>
+        <Text style={estilos.titulo}>Logar</Text>
         <Text style={estilos.texto}>Usuário:</Text>
         <TextInput style={estilos.input} onChangeText={texto => this.setState({ usuario: texto })} />
         <Text style={estilos.texto}>Senha:</Text>
         <TextInput style={estilos.input} secureTextEntry onChangeText={texto => this.setState({ senha: texto })} />
-        <Button title="Logar" onPress={this.logar} />
+        <Button title="Login" onPress={this.logar} />
         <View style={{ marginTop: 10 }}>
+        <Text style={{ fontSize: 15, alignSelf: 'center', marginVertical: 5 }}>Não tem Cadastro?</Text>
           <Button
-            title="Cadastrar"
+            title="Cadastre-se"
             onPress={() => this.props.navigation.navigate("Cadastro")}
           />
         </View>
@@ -86,11 +88,19 @@ class Cadastro extends React.Component {
   render() {
     return (
       <View style={{ padding: 20 }}>
-        <Text style={estilos.texto}>Cadastrar Usuário:</Text>
+        <Text style={estilos.titulo}>Cadastrar</Text>
+        <Text style={estilos.texto}>Usuário:</Text>
         <TextInput style={estilos.input} onChangeText={texto => this.setState({ user: texto })} />
         <Text style={estilos.texto}>Senha:</Text>
         <TextInput style={estilos.input} secureTextEntry onChangeText={texto => this.setState({ password: texto })} />
         <Button title="Cadastrar" onPress={this.gravar} />
+        <View style={{ marginTop: 10 }}>
+          <Text style={{ fontSize: 15, alignSelf: 'center', marginVertical: 5 }}>Já tenho Cadastro</Text>
+          <Button
+            title="Logar"
+            onPress={() => this.props.navigation.navigate("Login")}
+          />
+        </View>
       </View>
     );
   }
@@ -138,6 +148,7 @@ export default class App extends React.Component {
 }
 
 const estilos = StyleSheet.create({
-  texto: { color: 'blue', fontSize: 30, alignSelf: 'center', marginVertical: 5 },
+  titulo: { fontSize: 30, alignSelf: 'center', marginVertical: 5 },
+  texto: { fontSize: 20, alignSelf: 'center', marginVertical: 5 },
   input: { height: 50, padding: 5, fontSize: 25, borderColor: 'gray', borderWidth: 1, margin: 10, borderRadius: 8 }
 });

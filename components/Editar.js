@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert, ScrollView, TouchableOpacity } from "react-native";
+import React from "react";
+import { StyleSheet, View, Text, TextInput, Button, ScrollView, TouchableOpacity } from "react-native";
 import firebase from "firebase"; 
 
-class DetalhesTarefa extends Component {
+class DetalhesTarefa extends React.Component {
   state = {
     id: null,
     tarefa: null,
@@ -70,23 +70,6 @@ class DetalhesTarefa extends Component {
     this.setState({
       tarefa: { ...tarefa, passos: novosPassos, concluida: todosConcluidos }
     });
-
-
-    
-
-    /*const { sound } = await Audio.Sound.createAsync(
-      //require('../assets/check.mp3')
-    );
-    await sound.playAsync();
-
-    
-    /*if (todosConcluidos) {
-      const { sound: soundFinal } = await Audio.Sound.createAsync(
-        //require('../assets/completed.mp3')
-      );
-      await soundFinal.playAsync();
-      Vibration.vibrate(1000); 
-    }*/
   }
 
   alternarConcluidaDireto() {
@@ -128,33 +111,27 @@ class DetalhesTarefa extends Component {
 
     if (!tarefa) {
       return (
-        <View style={{ padding: 20 }}>
-          <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Detalhes da Tarefa</Text>
-          <Text>Sem tarefas</Text>
+        <View style={estilos.tela}>
+          <Text style={estilos.titulo}>Detalhes da Tarefa</Text>
+          <Text style={estilos.textoDetalhe}>Sem tarefas</Text>
         </View>
       );
     }
 
     return (
-      <View style={{ padding: 20 }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Detalhes da Tarefa</Text>
+      <View style={estilos.tela}>
+        <Text style={estilos.titulo}>Detalhes da Tarefa</Text>
 
         {/* Editar título */}
-        <Text style={{ marginTop: 10, fontWeight: 'bold' }}>Título:</Text>
+        <Text style={estilos.textoDetalhe}>Título:</Text>
         <TextInput
           value={novoTitulo}
           onChangeText={(text) => this.setState({ novoTitulo: text })}
-          style={{
-            borderWidth: 1,
-            borderColor: '#ccc',
-            padding: 8,
-            marginTop: 5,
-            borderRadius: 6,
-          }}
+          style={estilos.input}
         />
 
         {/* Lista de passos */}
-        <Text style={{ marginTop: 10, fontWeight: 'bold' }}>Passos:</Text>
+        <Text style={estilos.textoDetalhe}>Passos:</Text>
         <ScrollView style={{ maxHeight: 200, marginTop: 5 }}>
           {tarefa.passos.map((p) => (
             <TouchableOpacity
@@ -169,16 +146,9 @@ class DetalhesTarefa extends Component {
         </ScrollView>
 
         {/* Status geral */}
-        <Text style={{ marginTop: 10, fontWeight: 'bold' }}>
+        <Text style={estilos.textoDetalhe}>
           Status: {tarefa.concluida ? '✅ Concluída' : '⬜ Pendente'}
         </Text>
-
-        {/* Mensagem automática quando todos os passos forem concluídos */}
-        {tarefa.passos.every((p) => p.feito) && (
-          <Text style={{ marginTop: 5, color: 'green', fontWeight: 'bold' }}>
-            Todos os passos concluídos ✅
-          </Text>
-        )}
 
         {/* Botão para alternar status da tarefa (marca todos os passos junto) */}
         <View style={{ marginTop: 15 }}>
@@ -210,7 +180,8 @@ class DetalhesTarefa extends Component {
 const estilos = StyleSheet.create({
   tela: { flex: 1, padding: 16, backgroundColor: '#fff' },
   titulo: { fontSize: 24, fontWeight: 'bold', marginBottom: 16 },
-  textoDetalhe: { fontSize: 20 }
+  textoDetalhe: { fontSize: 20 },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10, borderRadius: 5 }
 });
 
 export default DetalhesTarefa;
