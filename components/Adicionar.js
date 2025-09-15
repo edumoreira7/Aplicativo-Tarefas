@@ -8,30 +8,48 @@ class Adicionar extends React.Component {
     super(props);
     this.state = {
       novaTarefa: '',
+      novoPasso: '',
+      passos: []
     };
   }
 
+  adicionarPasso() {
+    const id = this.state.passos.length + 1;
+    const passo = { id, descricao: this.state.novoPasso, feito: false };
+    this.setState({ passos: [...this.state.passos, passo], novoPasso: '' });
+  }
+
   salvarTarefa() {
-    const { novaTarefa } = this.state;
-    const { uid } = this.props.route.params; // pega UID do usuário logado
+    const { novaTarefa, passos } = this.state;
+    const { uid } = this.props.route.params;
+
+    if (!uid) {
+      alert("Usuário não identificado!");
+      return;
+    }
 
     if (novaTarefa.trim()) {
-      firebase.database()
-        .ref(`tarefas/${uid}`) // salva na pasta do usuário logado
-        .push({
+      const ref = firebase.database().ref(`tarefas/${uid}`).push();
+      
+      ref
+        .set({
+          id: ref.key,
           nome: novaTarefa,
-          concluida: false
+          passos: passos
         })
         .then(() => {
-          alert("Sucesso", "Tarefa salva!");
+          alert("Tarefa salva!");
           this.setState({ novaTarefa: '' });
           this.props.navigation.navigate('Home', { uid });
         })
         .catch(error => {
-          alert("Erro" + error.message);
+          alert("Erro ao salvar: " + error.message);
         });
+    } else {
+      alert("Digite uma tarefa!");
     }
   }
+
 
 
   render() {
@@ -44,6 +62,20 @@ class Adicionar extends React.Component {
           value={this.state.novaTarefa}
           onChangeText={text => this.setState({ novaTarefa: text })}
         />
+
+        <TextInput
+          placeholder="Novo Passo"
+          style={estilos.input}
+          value={this.state.novoPasso}
+          onChangeText={text => this.setState({ novoPasso: text })}
+        />
+        <Button title="Adicionar Passo" onPress={() => this.adicionarPasso()} />
+
+        <ScrollView style={{ marginVertical: 10 }}>
+          {this.state.passos.map(p => (
+            <Text key={p.id}>- {p.descricao}</Text>
+          ))}
+        </ScrollView>
 
         <Button title="Salvar Tarefa" onPress={() => this.salvarTarefa()} />
       </View>
